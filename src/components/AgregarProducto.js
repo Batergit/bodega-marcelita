@@ -1,151 +1,133 @@
 // @ts-nocheck
-import React, {useState, useEffect} from 'react';
-import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faImage, faAnglesRight } from '@fortawesome/free-solid-svg-icons';
+import React, {useState, useContext} from 'react';
 import { db, storage } from '../firebase/firebaseConfig';
 import {ref, uploadBytes} from 'firebase/storage';
-import { collection, addDoc, onSnapshot } from 'firebase/firestore';
+import { collection, addDoc, onSnapshot, snapshot } from 'firebase/firestore';
+import { contexto } from './contextos/contexto';
 
 const AgregarProducto = () => {
-    const [categorias, setCategorias] = useState([])
+    const Context = useContext(contexto);
     const [imageUpload, setImageUpload] = useState(null)
     const [nombreProducto, setNombreProducto] = useState('')
     const [marcaProducto, setMarcaProducto] = useState('')
     const [sizeProducto, setSizeProducto] = useState('')
     const [descripcion, setDescripcion] = useState('')
     const [categoriaProducto, setCategoriaProducto] = useState('')
-    const subirProducto = () => {
-        if(imageUpload == null) return;
-        const nombreImagen = nombreProducto.replaceAll(' ', '').toLowerCase()
-        const imageRef = ref(storage, `productos/${nombreImagen}`)
-
-        uploadBytes(imageRef, imageUpload).then(() => {
-            alert("Categoría Subida!!")
-        })
-        .then(() => {
-            addDoc(collection(db, "Productos"), {
-                nombre: nombreProducto,
-                imagen: nombreImagen,
-                marca: marcaProducto,
-                size: sizeProducto,
-                descripcion: descripcion,
-                categoria: categoriaProducto,
-                stock: true,
-            })
-        })
-    }
-
-    useEffect(() => {
-        onSnapshot(collection(db, "Categorias"),
-        (snapshot) => {
-            const arrayCategorias = snapshot.docs.map((categoria) => {
-                return {...categoria.data(), id:categoria.id}
-            })
-            setCategorias(arrayCategorias)
-        })
-    }, [])
 
     return (
-        <div>
-            <h2>Agregar Producto</h2>
-            <br />
-            <hr />
-            <form>
-                <Input 
-                    type="text" 
-                    placeholder='Nombre Producto' 
-                    value={nombreProducto} 
-                    onChange={(e) => setNombreProducto(e.target.value)}
-                />
+        <>
+            <div className='row'>
+                <div className='col-12'>
+                    <h2>Agregar Producto</h2>
+                    <hr />
+                </div>
+            </div>
 
-                <Input 
-                    type="text" 
-                    placeholder='Marca Producto' 
-                    value={marcaProducto} 
-                    onChange={(e) => setMarcaProducto(e.target.value)}
-                />
+            <form className='row'>
+                <div className='col-md-3 d-grid col-12'>
+                    <label className='form-label'>Nombre Producto
+                        <input 
+                            className='form-control mt-2 d-inline'
+                            type="text" 
+                            placeholder='Papas Fritas' 
+                            value={nombreProducto} 
+                            onChange={(e) => setNombreProducto(e.target.value)}
+                        />
+                    </label>
+                </div>
 
-                <Input 
-                    type="text" 
-                    placeholder='Tamaño Producto' 
-                    value={sizeProducto} 
-                    onChange={(e) => setSizeProducto(e.target.value)} 
-                />
+                <div className='col-md-3 d-grid col-12'>
+                    <label className='form-label'>Marca Producto
+                        <input 
+                            className='form-control mt-2 d-inline'
+                            type="text" 
+                            placeholder='Evercrisp' 
+                            value={marcaProducto} 
+                            onChange={(e) => setMarcaProducto(e.target.value)}
+                        />
+                    </label>
+                </div>
 
-                <Select onChange={(e) => setCategoriaProducto(e.target.value)}>
-                    {categorias.map((element) => {
-                        return <option key={element.id} value={element.nombre}>{element.nombre}</option>
-                    })}
-                </Select>
+                <div className='col-md-3 d-grid col-12'>
+                    <label className='form-label'>Tamaño Producto
+                        <input 
+                            className='form-control mt-2 d-inline'
+                            type="text" 
+                            placeholder='350 gr' 
+                            value={sizeProducto} 
+                            onChange={(e) => setSizeProducto(e.target.value)}
+                        />
+                    </label>
+                </div>
 
+                <div className='col-md-3 d-grid col-12'>
+                    <label className='form-label d-block'>Categoría
+                        <select
+                            className='form-select mt-2'
+                            id="selectCategoria"
+                            aria-label="Default select example"
+                            onChange={(e) => setCategoriaProducto(e.target.value)}
+                        >
+                            {Context.categorias.map((element) => {
+                                return <option key={element.id} value={element.nombre}>{element.nombre}</option>
+                            })}
+                        </select>
+                    </label>
+                </div>
+
+                <div className='col-md-6 d-grid col-12'>
+                    <label className='form-label d-block'>Descripción
+                        <textarea 
+                            className='form-control mt-2'
+                            type="text" 
+                            placeholder='Descripción' 
+                            value={descripcion} 
+                            onChange={(e) => setDescripcion(e.target.value)} 
+                        ></textarea>
+                    </label>
+                </div>
                 
-                <br />
-                <Input 
-                    type="text" 
-                    placeholder='Descripción' 
-                    value={descripcion} 
-                    onChange={(e) => setDescripcion(e.target.value)} 
-                />
+                <div className='col-md-6 d-grid col-12'>
+                    <label className='form-label d-block'>Subir Imagen
+                        <input 
+                            className='form-control mt-2'
+                            type="file" 
+                            onChange={(e) => setImageUpload(e.target.files[0])}
+                        />
+                    </label>
+                </div>
+                    
+                <div class="d-grid col-12 mx-auto mt-2">
+                    <button
+                        class="btn btn-primary"
+                        onClick={(e) => {
+                            e.preventDefault()
+                            
+                            if(imageUpload == null) return;
+                            const nombreImagen = nombreProducto.replaceAll(' ', '').toLowerCase()
+                            const imageRef = ref(storage, `productos/${nombreImagen}`)
 
-                <LabelInputImagen>
-                    <FontAwesomeIcon icon={faImage} />
-                    <InputImagen type="file" onChange={(e) => setImageUpload(e.target.files[0])} />
+                            uploadBytes(imageRef, imageUpload).then(async() => {
+                                await addDoc(collection(db, "Productos"), {
+                                    nombre: nombreProducto,
+                                    imagen: nombreImagen,
+                                    marca: marcaProducto,
+                                    size: sizeProducto,
+                                    descripcion: descripcion,
+                                    categoria: document.getElementById("selectCategoria").value,
+                                    stock: 1
+                                })
+                                alert("Producto Subido!!")
+                            })
 
-                </LabelInputImagen>
-
-                <Boton onClick={(e) => {
-                    e.preventDefault()
-                    subirProducto();
-                }}><FontAwesomeIcon icon={faAnglesRight}/></Boton>
+                        }}
+                    >Subir Producto</button>
+                </div>
             </form>
-        </div>
+        </>
     );
 }
 
-const Input = styled.input`
-    margin-bottom: 30px;
-    margin-right: 10px;
-    padding: 10px;
-    border-radius: 3px;
-    border: 1px solid #000042;
-    font-size: 16px;
-    height: 20px;
-    color: #454545;
-    width: 20%;
-`
 
-const Select = styled.select`
-    color: #454545;
-    height: 40px;
-    border: 1px solid black;
-    border-radius: 3px;
-    margin-right: 10px;
-    font-size: 16px;
-`
 
-const InputImagen = styled.input`
-    display: none;
-`
-
-const LabelInputImagen = styled.label`
-    margin-right: 10px;
-    background: #266ce2;
-    border-radius: 5px;
-    border: 1px solid #000042;
-    display: inline-block;
-    width: 50px;
-    text-align: center;
-    padding: 10px;
-    color: #000042;
-`
-
-const Boton = styled.button`
-    background: #44c39d;
-    height: 40px;
-    border-radius: 5px;
-    border: 1px solid black;
-    color: #004200;
-`
- 
 export default AgregarProducto;

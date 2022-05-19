@@ -24,8 +24,6 @@ const Inicio = () => {
         <ContenedorApp>
             <Header>
                 <BarraNavegacion>
-                    
-                    
                     <button onClick={() => console.log("Menu")}>Menu</button>
                     <button onClick={() => CambiarItemMenu(1)}>Inicio</button>
                     <button onClick={() => CambiarItemMenu(2)}>Quienes Somos</button>
@@ -33,8 +31,7 @@ const Inicio = () => {
                 </BarraNavegacion>
 
                 <Portada>
-                
-                    <div >
+                    <div>
                         {apertura === true ? 
                             <p>[La tienda está Abierta]</p>
                         :
@@ -48,21 +45,17 @@ const Inicio = () => {
                         </p>
                     </div>
                 </Portada>
-                
             </Header>
             
-            <Seccion>
-                <div>
-                    {itemMenu === 1 ?
-                        <MenuCategoria />
-                        
-                    :itemMenu === 2 ?
-                        <QuienesSomos />
-                    :
-                        <Contacto />
-                    }
-                </div>
-            </Seccion>
+            <div className="container shadow p-4">
+                {itemMenu === 1 ?
+                    <MenuCategoria />
+                :itemMenu === 2 ?
+                    <QuienesSomos />
+                :
+                    <Contacto />
+                }
+            </div>
             
             
         </ContenedorApp>
@@ -100,7 +93,7 @@ const BarraNavegacion = styled.nav`
 const Portada = styled.div`
     background: url(${banner});
     background-position: top;
-    background-size: 100%;
+    background-size: auto 100%;
     background-repeat: no-repeat;
     background-attachment: fixed;
     text-align: center;
@@ -119,16 +112,6 @@ const Portada = styled.div`
 
     p {
         font-size: 20px;
-    }
-`
-
-const Seccion = styled.section`
-    width: 70%;
-    margin: 0 auto;
-
-    h3 {
-        font-size: 30px;
-        margin-bottom: 20px;
     }
 `
 

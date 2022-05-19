@@ -4,11 +4,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const ItemMenuAdmin = (props) => {
     return (
-        <ItemMenu fondo={props.fondo} fontColor={props.fontColor} onClick={() => props.setOpcion(props.titulo)}>
-            <TituloItemMenu>{props.titulo}</TituloItemMenu>
-            <IconoItemMenu>
-                <FontAwesomeIcon icon={props.icono} />
-            </IconoItemMenu>
+        <ItemMenu 
+            
+            fondo={props.fondo}
+            fontColor={props.fontColor} 
+            onClick={() => props.setOpcion(props.titulo)}
+            >
+                <TituloItemMenu>{props.titulo}</TituloItemMenu>
+                <IconoItemMenu>
+                    <FontAwesomeIcon icon={props.icono} />
+                </IconoItemMenu>
         </ItemMenu>
     );
 }
@@ -19,7 +24,6 @@ const ItemMenu = style.div.attrs(props => ({
     fontColor: props.fontColor
 }))`
     height: 140px;
-    width: 30%;
     border: 1px solid #545454;
     border-radius: 5px;
     display: flex;

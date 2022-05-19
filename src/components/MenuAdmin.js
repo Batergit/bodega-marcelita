@@ -6,14 +6,17 @@ import { faCartShopping, faCalendar, faCertificate } from '@fortawesome/free-sol
 const MenuAdmin = ({setOpcion}) => {
     return (
         <Menu>
-            <ItemMenuAdmin
-                titulo="Productos"
-                fondo="#44c39d"
-                fontColor="#004200"
-                icono={faCartShopping}
-                onClick={() => {console.log(1)}}
-                setOpcion={setOpcion}
-            />
+            <div className='col-4'>
+                <ItemMenuAdmin
+
+                    titulo="Productos"
+                    fondo="#44c39d"
+                    fontColor="#004200"
+                    icono={faCartShopping}
+                    onClick={() => {console.log(1)}}
+                    setOpcion={setOpcion}
+                />
+            </div>
 
             <ItemMenuAdmin
                 titulo="Categorías"
@@ -39,6 +42,5 @@ const Menu = styled.div`
     justify-content: space-between;
     margin-bottom: 20px;
 `
-
 
 export default MenuAdmin;

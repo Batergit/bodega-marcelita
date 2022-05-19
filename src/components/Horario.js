@@ -21,24 +21,34 @@ const Horario = () => {
     }, [])
 
     return (
-        <div>
-            <h2>Estado Apertura de la tienda</h2>
-            <hr />
-            <label>
-                {labelInterruptor}
-                <input
-                    type="checkbox"
-                    value={apertura}
-                    onClick={(e) => {
-                        e.preventDefault()
-                        updateDoc(doc(db, "Horario", "IxTQeeEAkbsIUXrP9m3W"), {
-                            Apertura: !apertura
-                        })
-                    }}
-                />
-            </label>
-                
-        </div>
+        <>
+            <div className='row'>
+                <div className='col-12'>
+                    <h2>Estado Apertura de la tienda</h2>
+                    <hr />
+                </div>
+            </div>
+            <div className='row'>
+                <div className='col-12'>
+                    <form className='form-check form-switch'>
+                        <input
+                            type="checkbox"
+                            value={apertura}
+                            className="form-check-input"
+                            id="flexSwitchCheckChecked"
+                            onChange={(e) => {
+                                e.preventDefault()
+                                setApertura(!apertura)
+                                updateDoc(doc(db, "Horario", "IxTQeeEAkbsIUXrP9m3W"), {
+                                    Apertura: !apertura
+                                })
+                            }}
+                        />
+                        <label class="form-check-label" for="flexSwitchCheckChecked">{labelInterruptor}</label>
+                    </form>
+                </div>
+            </div>
+        </>
     );
 }
 
